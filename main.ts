@@ -23,6 +23,7 @@ export const bot: Client = new Client({
   ],
 });
 
+export const ingredients: string[] = [];
 const commands: string[] = [];
 
 // Load commands into Discord.js from ./commands
