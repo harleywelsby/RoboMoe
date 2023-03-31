@@ -1,0 +1,25 @@
+{
+  "name": "discord-bot-template",
+  "version": "1.0.0",
+  "description": "TypeScript template for Discord Bot development with Discord.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/harleywelsby/Discord-Bot-TypeScript-Template.git"
+  },
+  "author": "Harley Welsby",
+  "type": "module",
+  "dependencies": {
+    "@discordjs/rest": "^1.3.0",
+    "discord-api-types": "^0.37.14",
+    "discord.js": "^14.6.0",
+    "typescript": "^4.8.4"
+  },
+  "scripts": {
+    "bot": "tsc && node --experimental-json-modules build/main"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.40.1",
+    "@typescript-eslint/parser": "^5.40.1",
+    "eslint": "^8.25.0"
+  }
+}
