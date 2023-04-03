@@ -1,7 +1,7 @@
 # Robo-Moe
 
 It's time to get creative with your friday night drinks! To use the bot, use the commands below to set up a 'cabinet' of ingredients,
-then use /drink to create a new recipe, complete with an AI-generated name, using the <a href="https://openai.com/blog/openai-api">OpenAI API</a>
+then use /drink to create a new recipe, complete with an AI-generated name, using the <a href="https://openai.com/blog/openai-api">OpenAI API</a>.
 
 # Commands:
 
