@@ -1,9 +1,3 @@
-// =============================================================
-// || Discord Bot TypeScript Template                         ||
-// =============================================================
-// || AUTHOR: Harley Welsby, https://github.com/harleywelsby  ||
-// =============================================================
-
 import { ActivityType, Client, Events, GatewayIntentBits } from "discord.js";
 import { REST } from "@discordjs/rest";
 import { Routes } from "discord-api-types/v9";
