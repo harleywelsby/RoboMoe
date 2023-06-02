@@ -13,6 +13,11 @@ export async function doDrink(interaction: ChatInputCommandInteraction) {
     return;
   }
 
+  // Discord only gives you 3 seconds to reply to a slash command, and the AI can take some time.
+  // To solve this, we post a reply immediately and then edit it when the AI is done.
+  // See: https://stackoverflow.com/questions/67413046/slash-commands-unknown-interaction
+  interaction.reply("Working on it! The robots are thinking...");
+
   // Use between 2 and 5 ingredients from the list
   const maxIngredients = ingredients.length < 5 ? ingredients.length : 5;
   const numIngredients = Math.floor(Math.random() * maxIngredients) + 2;
@@ -29,10 +34,11 @@ export async function doDrink(interaction: ChatInputCommandInteraction) {
     recipe += `${parts} part(s) ${nextIngredient}\n`;
   }
 
-  interaction.reply(
-    `Here's your drink, ${
-      interaction.member.user
-    }! I call it the ${await generateName(recipe)}\n\n${recipe}`
+  const name = await generateName(recipe);
+  const method = await generateMethod(name, recipe);
+
+  interaction.editReply(
+    `Here's your drink, ${interaction.member.user}! I call it the ${name}\n\n${recipe}\nInstructions:\n${method}`
   );
 }
 
@@ -69,4 +75,30 @@ async function generateName(ingredients: string) {
     });
 
   return name.trimEnd();
+}
+
+async function generateMethod(title: string, ingredients: string) {
+  const prompt = `Human: How do I make a cocktail titled "${title}" with the following ingredients:\n ${ingredients}? AI:`;
+
+  const configuration = new Configuration({
+    apiKey: config.OpenAiKey,
+  });
+  const openai = new OpenAIApi(configuration);
+
+  const method = await openai
+    .createCompletion({
+      model: "text-davinci-003",
+      prompt: prompt,
+      temperature: 0.9,
+      max_tokens: 150,
+      top_p: 1,
+      frequency_penalty: 0,
+      presence_penalty: 0,
+      stop: ["AI:"],
+    })
+    .then((response) => {
+      return response.data.choices[0].text.trimStart();
+    });
+
+  return method;
 }
