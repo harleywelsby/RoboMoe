@@ -9,7 +9,7 @@
   "author": "Harley Welsby",
   "type": "module",
   "dependencies": {
-    "@discordjs/rest": "^1.6.0",
+    "@discordjs/rest": "^2.0.1",
     "discord.js": "^14.9.0",
     "openai": "^3.2.1"
   },
