@@ -14,10 +14,12 @@ export async function doDrink(interaction: ChatInputCommandInteraction) {
     return;
   }
 
-  // Discord only gives you 3 seconds to reply to a slash command, and the AI can take some time.
-  // To solve this, we post a reply immediately and then edit it when the AI is done.
-  // See: https://stackoverflow.com/questions/67413046/slash-commands-unknown-interaction
-  interaction.reply("Working on it! The robots are thinking...");
+  if (config.UseAI) {
+    // Discord only gives you 3 seconds to reply to a slash command, and the AI can take some time.
+    // To solve this, we post a reply immediately and then edit it when the AI is done.
+    // See: https://stackoverflow.com/questions/67413046/slash-commands-unknown-interaction
+    interaction.reply("Working on it! The robots are thinking...");
+  }
 
   // Use between 2 and 5 ingredients from the list
   const maxIngredients = ingredients.length < 5 ? ingredients.length : 5;
@@ -42,7 +44,7 @@ export async function doDrink(interaction: ChatInputCommandInteraction) {
       `Here's your drink, ${interaction.member.user}! I call it the ${name}\n\n${recipe}\nInstructions:\n${method}`
     );
   } else {
-    interaction.editReply(
+    interaction.reply(
       `Here's your drink, ${
         interaction.member.user
       }! I call it the ${generateName()}\n\n${recipe}`
