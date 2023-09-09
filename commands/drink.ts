@@ -1,7 +1,8 @@
 import { ChatInputCommandInteraction } from "discord.js";
 import { ingredients } from "../main.js";
+import { generateAiName, generateAiMethod } from "../util/aiInterface.js";
 import config from "../config/config.json" assert { type: "json" };
-import { Configuration, OpenAIApi } from "openai";
+import names from "../config/names.json" assert { type: "json" };
 
 export async function doDrink(interaction: ChatInputCommandInteraction) {
   let recipe = "";
@@ -34,71 +35,24 @@ export async function doDrink(interaction: ChatInputCommandInteraction) {
     recipe += `${parts} part(s) ${nextIngredient}\n`;
   }
 
-  const name = await generateName(recipe);
-  const method = await generateMethod(name, recipe);
-
-  interaction.editReply(
-    `Here's your drink, ${interaction.member.user}! I call it the ${name}\n\n${recipe}\nInstructions:\n${method}`
-  );
+  if (config.UseAI) {
+    const name = await generateAiName(recipe);
+    const method = await generateAiMethod(name, recipe);
+    interaction.editReply(
+      `Here's your drink, ${interaction.member.user}! I call it the ${name}\n\n${recipe}\nInstructions:\n${method}`
+    );
+  } else {
+    interaction.editReply(
+      `Here's your drink, ${
+        interaction.member.user
+      }! I call it the ${generateName()}\n\n${recipe}`
+    );
+  }
 }
 
-// Connect to OpenAI and generate a cool name for the drink
-async function generateName(ingredients: string) {
-  const prompt = `Human: Generate a name for a cocktail with the following ingredients:\n ${ingredients} AI:`;
-
-  const configuration = new Configuration({
-    apiKey: config.OpenAiKey,
-  });
-  const openai = new OpenAIApi(configuration);
-
-  const name = await openai
-    .createCompletion({
-      model: "text-davinci-003",
-      prompt: prompt,
-      temperature: 0.9,
-      max_tokens: 150,
-      top_p: 1,
-      frequency_penalty: 0,
-      presence_penalty: 0,
-      stop: ["AI:"],
-    })
-    .then((response) => {
-      const drinkName = response.data.choices[0].text.trimStart();
-
-      // If the name has quotes, then the bot has sent other text around the name.
-      // Cut out the extra text and just return the name.
-      if (drinkName.includes('"')) {
-        return drinkName.split('"')[1];
-      }
-
-      return drinkName;
-    });
-
-  return name.trimEnd();
-}
-
-async function generateMethod(title: string, ingredients: string) {
-  const prompt = `Human: How do I make a cocktail titled "${title}" with the following ingredients:\n ${ingredients}? AI:`;
-
-  const configuration = new Configuration({
-    apiKey: config.OpenAiKey,
-  });
-  const openai = new OpenAIApi(configuration);
-
-  const method = await openai
-    .createCompletion({
-      model: "text-davinci-003",
-      prompt: prompt,
-      temperature: 0.9,
-      max_tokens: 150,
-      top_p: 1,
-      frequency_penalty: 0,
-      presence_penalty: 0,
-      stop: ["AI:"],
-    })
-    .then((response) => {
-      return response.data.choices[0].text.trimStart();
-    });
-
-  return method;
+async function generateName() {
+  const name = `${names[Math.floor(Math.random() * names.Names.length)]} ${
+    names[Math.floor(Math.random() * names.Names.length)]
+  }`;
+  return name;
 }
