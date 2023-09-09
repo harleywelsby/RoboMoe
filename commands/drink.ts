@@ -47,7 +47,7 @@ export async function doDrink(interaction: ChatInputCommandInteraction) {
     interaction.reply(
       `Here's your drink, ${
         interaction.member.user
-      }! I call it the ${generateName()}\n\n${recipe}`
+      }! I call it the ${await generateName()}\n\n${recipe}`
     );
   }
 }
