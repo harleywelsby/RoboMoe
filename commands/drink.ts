@@ -53,8 +53,8 @@ export async function doDrink(interaction: ChatInputCommandInteraction) {
 }
 
 async function generateName() {
-  const name = `${names[Math.floor(Math.random() * names.Names.length)]} ${
-    names[Math.floor(Math.random() * names.Names.length)]
-  }`;
+  const name = `${
+    names.Names[Math.floor(Math.random() * names.Names.length)]
+  } ${names.Names[Math.floor(Math.random() * names.Names.length)]}`;
   return name;
 }
