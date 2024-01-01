@@ -18,7 +18,7 @@
     "@typescript-eslint/parser": "^5.62.0",
     "discord-api-types": "^0.37.14",
     "eslint": "^8.25.0",
-    "typescript": "^5.0.3"
+    "typescript": "^5.3.3"
   },
   "scripts": {
     "start": "tsc && node --experimental-json-modules build/main"
